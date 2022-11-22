@@ -2,6 +2,8 @@ import path from "node:path";
 import express from "express";
 import mongoose from "mongoose";
 import { router } from "./router";
+import cors from 'cors';
+
 require("dotenv").config();
 
 const DB_USER = process.env.DB_USER;
@@ -21,6 +23,7 @@ mongoose
     );
 
     app.use(express.json());
+    app.use(cors());
     app.use(router);
 
     app.listen(3001, () => {

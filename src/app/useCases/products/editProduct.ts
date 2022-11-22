@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { Product } from "../../models/Product";
 
-export async function createProduct(req: Request, res: Response) {
-
+export async function editProduct(req: Request, res: Response) {
   try {
+    const { productId } = req.params;
     const imagePath = req.file?.filename;
+
     const {
       name,
       description,
@@ -14,7 +15,7 @@ export async function createProduct(req: Request, res: Response) {
       category,
     } = req.body;
 
-    const product = await Product.create({
+    const productEdit = {
       name,
       imagePath,
       description,
@@ -22,9 +23,11 @@ export async function createProduct(req: Request, res: Response) {
       oldPrice: Number(oldPrice),
       quantityStock: Number(quantityStock),
       category,
-    });
+    };
 
-    res.status(201).json(product);
+    await Product.findByIdAndUpdate(productId, productEdit);
+
+    res.sendStatus(204);
   } catch (error) {
     console.log(error);
     res.sendStatus(500);
